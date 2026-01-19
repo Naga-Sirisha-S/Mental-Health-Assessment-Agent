@@ -1,0 +1,10 @@
+python=3.10
+fastapi 
+uvicorn 
+python-dotenv 
+pandas 
+langchain 
+langchain-openai 
+langchain-community 
+chromadb
+openpyxl
