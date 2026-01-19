@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VYNA - Mental Health Wellness</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f4f8; text-align: center; padding: 20px; }
+        h1 { color: #2b6777; }
+        #chat-box { width: 60%; margin: auto; background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 0 10px #ccc; text-align: left; height: 400px; overflow-y: auto; }
+        .msg { margin: 8px 0; }
+        .patient { color: #1a73e8; font-weight: bold; }
+        .doctor { color: #2b6777; font-weight: bold; }
+        input { width: 70%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; background: #2b6777; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #1e4d5f; }
+    </style>
+</head>
+<body>
+    <h1>🌿 VYNA - Mental Health Wellness</h1>
+    <div id="chat-box"></div>
+    <br>
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="getReflection()">Final Reflection</button>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            if (!userInput) return;
+            const chatBox = document.getElementById("chat-box");
+
+            chatBox.innerHTML += `<div class='msg patient'>🙍 You: ${userInput}</div>`;
+            document.getElementById("userInput").value = "";
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ message: userInput })
+            });
+
+            const data = await response.json();
+            chatBox.innerHTML += `<div class='msg doctor'>👩‍⚕️ Doctor: ${data.reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function getReflection() {
+            const chatBox = document.getElementById("chat-box");
+
+            const response = await fetch("/final_reflection", { method: "GET" });
+            const data = await response.json();
+
+            chatBox.innerHTML += `<div class='msg doctor'><b>🌿 Final Reflection:</b> ${data.reflection}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+
